@@ -31,7 +31,7 @@ int	ft_puthex(unsigned long long nbr)
 	count = 0;
 	str = "0123456789abcdef";
 	if (nbr >= 16)
-		count += ft_putnbr(nbr/16);
+		count += ft_puthex(nbr/16);
 	return (write(1, &str[nbr%16], 1));
 }
 
