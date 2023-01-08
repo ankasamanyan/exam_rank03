@@ -16,7 +16,6 @@ To test your program compare your results with the true printf.
 
 Your function must not leak.
 
-
 Exemples of the function output:
 
 call: ft_printf("Hello %s\n", "toto");
