@@ -1,45 +1,36 @@
-#include "get_next_line.h"
+#include "stdio.h"
+#include "unistd.h"
+#include <fcntl.h>
+#include <stdlib.h>
 
-char	*get_next_line(int fd)
+
+char *get_next_line(int fd)
 {
-    // (void)BUFFER_SIZE;
-
-	char	*ret = malloc(9999);
-	char	c;
-	int		i = 0;
-	int		read_ret = 0;
-
-	if (fd < 0)
-		return (NULL);
-	while ((read_ret = read(fd, &c, BUFFER_SIZE)) > 0)
+	// (void)	BUFFER_SIZE;
+	size_t	BUFFER_SIZE = 1;
+	char *string = malloc(100000);
+	char *copy = string;
+	while(read(fd, copy, BUFFER_SIZE) > 0 && *copy++ != '\n');
+	if (copy != string)
 	{
-		ret[i] = c;
-		i++;
-		if (c == '\n')
-			break ;
+		*copy = 0;
+		return string;
 	}
-	if (i == 0 || read_ret < 0)
-	{
-		free(ret);
-		return (NULL);
-	}
-	ret[i] = '\0';
-	return (ret);
+	free(string);
+	return (NULL);
 }
 
-int		main(int argc, char **argv)
-{
-	int 	fd = 0;
-	char	*line;
 
-	if (argc > 1)
-		fd = open(argv[1], O_RDONLY);
-	line = get_next_line(fd);
-	while (line != NULL)
+int main()
+{
+	int fd = open("testy.txt", R_OK);
+	if (fd == -1)
+		return 1;
+	char *stringy = get_next_line(fd);
+	while(stringy != NULL)
 	{
-		printf("line |%s", line);
-		free(line);
-		line = get_next_line(fd);
+		printf("%s", stringy);
+		stringy = get_next_line(fd);
+
 	}
-	return (0);
 }
